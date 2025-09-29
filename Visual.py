@@ -1354,7 +1354,7 @@ class VisualManager():
 
         fncreturn = ANOVA2(self.getanova_df(),self.getanova_cat_feat(),self.getanova_value_feat(),self.getresultout())
         
-        with boxout:
+        with self.getboxout():
             clear_output()
             self.getanova_df().boxplot(self.getanova_value_feat(), by=self.getanova_cat_feat(), figsize=(12, 8))
      
