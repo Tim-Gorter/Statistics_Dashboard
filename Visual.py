@@ -1009,7 +1009,7 @@ class VisualManager():
                     'heart_rate_data.csv',
                       'diet.csv',]
         
-        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],desription = 'Datasets: '))
+        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],description = 'Datasets: '))
         
         self.setlinelabel(widgets.Label(value='_______________________________'))
         self.getlinelabel().layout.display= 'none'
