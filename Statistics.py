@@ -114,8 +114,6 @@ def TestHypothesis2(sample_size,sample_mean,sample_stdev,pop_mean,pop_stdev,twos
                     test_stat = (sample_mean-pop_mean)/(pop_stdev/np.sqrt(sample_size))
                     teststatstr = 't-score'
         if mode.find('Proportion') > -1:
-
-            
             Stdev = math.sqrt((pop_mean*(1-pop_mean))/sample_size) # is None is sampling stdev is not specified.
             
             test_stat = ((sample_mean)-pop_mean)/Stdev
@@ -128,7 +126,7 @@ def TestHypothesis2(sample_size,sample_mean,sample_stdev,pop_mean,pop_stdev,twos
             meas_var = np.sqrt(std_error1**2+std_error2**2)
             sample_mean = sample_mean[0] - sample_mean[1]
             test_stat = (sample_mean-pop_mean)/meas_var
-            ztest = False
+            ztest = True
             teststatstr = 't-score'
 
         if mode.find('Paired sampled t-test') > -1:
