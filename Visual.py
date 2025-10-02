@@ -820,8 +820,11 @@ class VisualManager():
     
             if not self.CheckInputComplete(mode):
                 return
+
+        
         Samp_size = self.getSAMPSIZEtxt().value
         Samp_mean = self.getSAMPMEANtxt().value
+        self.gettestingtext().value +=" 2 >> "+ str(self.getprobtype().value)+"\n"
         
         if mode.find('Difference between two means') > -1:
             self.gettestingtext().value += str(Samp_size)+"\n"
@@ -830,16 +833,21 @@ class VisualManager():
             Samp_mean = [float(Samp_mean[:Samp_mean.find(",")]),float(Samp_mean[Samp_mean.find(",")+1:])]
             self.gettestingtext().value += str(Samp_size)+"\n"
             self.gettestingtext().value += str(Samp_mean)+"\n"
-            
+      
         else:
-            Samp_size = int(Samp_size)+self.getsmapchange()
-            Samp_mean = float(Samp_mean)
+            self.gettestingtext().value +=" 3 >> "+ str(self.getprobtype().value)+"\n"
+            if mode.find('Paired sampled t-test') == -1:
+                self.gettestingtext().value +=" 4 >> "+ str(self.getprobtype().value)+"\n"
+                Samp_size = int(Samp_size)+self.getsmapchange()
+                Samp_mean = float(Samp_mean)
 
-        
-    
-        Pop_mean = float(self.getPOPMEANtxt().value)
+        Pop_mean = None
+        if mode.find('Paired sampled t-test') == -1:
+            if mode.find('Difference between two means') == -1:
+                Pop_mean = float(self.getPOPMEANtxt().value)
         Pop_stdev = None
-    
+
+        self.gettestingtext().value +=" 5 >> "+ str(self.getprobtype().value)+"Sample size "+str(Samp_size)+"\n"
      
         if mode.find('One sample mean') > -1: 
             if self.getstdtype().value == "Population":
@@ -848,11 +856,34 @@ class VisualManager():
            
         
         if mode.find('Difference between two means') == -1:
-            if Samp_size < 2:
-                return
+            if mode.find('Paired sampled t-test') == -1:
+                if Samp_size < 2:
+                    return
+
+        if mode.find('Paired sampled t-test') > -1:
+            self.gettestingtext().value +=" 6 >> "+ str(self.getprobtype().value)+"\n"
+     
+            Samp_size = int(len(self.getprd_ttest_df()))
+            self.gettestingtext().value +=" 7  >> "+ str(self.getprobtype().value)+"\n"
+            self.gettestingtext().value += "Sample size: "+str(Samp_size)+"\n"
+
+            self.gettestingtext().value += "Before: "+str(self.getprtt_bef_feat())+", after: "+str(self.getprtt_aft_feat())+"\n"  
+            list1 = [x for x in self.getprd_ttest_df()[self.getprtt_aft_feat()]]
+            self.gettestingtext().value += "list1 : "+str(list1)+"\n"
+            list2 = [x for x in self.getprd_ttest_df()[self.getprtt_bef_feat()]]
+            diff = [list1[i] - list2[i] for i in range(len(list1))]
+ 
+            self.gettestingtext().value += "Differences: "+str(diff)+"\n"
+            Samp_mean = sum(diff)/len(diff)
+            stdev = 0
+            for i in range(len(list1)):
+                stdev+=(diff[i]-Samp_mean)**2
+            Samp_stdev= np.sqrt((stdev)/(len(diff)-1))
+            Pop_mean = 0
+          
          
-        
-        Samp_stdev = None 
+        if mode.find('Paired sampled t-test') == -1:
+            Samp_stdev = None 
     
         if mode.find('One sample mean') > -1: 
             if self.getstdtype().value == "Sample":
@@ -862,12 +893,10 @@ class VisualManager():
             Samp_stdev = self.getmytxt().value
             Samp_stdev = [float(Samp_stdev[:Samp_stdev.find(",")]),float(Samp_stdev[Samp_stdev.find(",")+1:])]
             self.gettestingtext().value += str(Samp_stdev)+"\n"
-        if mode.find('Paired sampled t-test') > -1:
-            Samp_stdev = float(self.getmytxt().value)
-            Samp_size = int(self.getSAMPSIZEtxt().value)
-            Samp_mean = float(self.getSAMPMEANtxt().value)
+       
+            
     
-        
+        self.gettestingtext().value += str(self.getprobtype().value)+"\n"
           
         Conf_lvl = float(self.getconflvl().value)
         Two_sided = (self.gethyptype().value == "Two-tailed") 
@@ -880,6 +909,10 @@ class VisualManager():
                 Alt_side = "<"
     
         self.gettestingtext().value += "Calling HT function...: "+"\n"
+        self.gettestingtext().value += "Samp_mean: "+str(Samp_mean)+"\n"
+        self.gettestingtext().value += "Samp_stdev: "+str(Samp_stdev)+"\n"
+        self.gettestingtext().value += "Pop_mean: "+str(Pop_mean)+"\n"
+        self.gettestingtext().value += "Samp_size: "+str(Samp_size)+"\n"
         testreturn = TestHypothesis2(Samp_size,Samp_mean,Samp_stdev,Pop_mean,Pop_stdev,Two_sided,Alt_side,Conf_lvl,self.getInvFigPage(),mode) 
         self.getresultexp().value = "P-value: "+str(round(testreturn[0],3))+"\n"
         self.getresultexp().value += "Conclusion: "+str(testreturn[1])+"\n"
@@ -913,7 +946,7 @@ class VisualManager():
 
     def OpenPRfile(self,event): 
     
-        url = self.getfolderselect().value
+        url = "https://github.com/muratfirat78/CPP_Datasets/raw/main/"+self.getfolderselect().value
     
         self.setprd_ttest_df(pd.read_csv(url,sep =',',quotechar="'"))
     
@@ -983,12 +1016,12 @@ class VisualManager():
         f2 =interactive(self.Sample_Change, Size_delta = widgets.IntSlider(min=-25,max=25,step=5,value=0));
         self.setitems2([c for c in f2.children])
         
-        pairedlinks = ['https://github.com/muratfirat78/CPP_Datasets/raw/main/Hypothermia.csv',
-                     'https://github.com/muratfirat78/CPP_Datasets/raw/main/Diet_R.csv',
-                    'https://github.com/muratfirat78/CPP_Datasets/raw/main/heart_rate_data.csv',
-                      'https://github.com/muratfirat78/CPP_Datasets/raw/main/diet.csv',]
+        pairedlinks = ['Hypothermia.csv',
+                     'Diet_R.csv',
+                    'heart_rate_data.csv',
+                      'diet.csv',]
         
-        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks]))
+        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],desription = 'Datasets: '))
         
         self.setlinelabel(widgets.Label(value='_______________________________'))
         self.getlinelabel().layout.display= 'none'
