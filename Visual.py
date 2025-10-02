@@ -810,7 +810,7 @@ class VisualManager():
 
     def PlotNumbers(self,Conf_level):
        
-        self.gettestingtext().value += str(self.getprobtype().value)+"\n"
+        self.gettestingtext().value += "Problem type: "+str(self.getprobtype().value)+"\n"
     
         mode = self.getprobtype().value
 
@@ -824,7 +824,6 @@ class VisualManager():
         
         Samp_size = self.getSAMPSIZEtxt().value
         Samp_mean = self.getSAMPMEANtxt().value
-        self.gettestingtext().value +=" 2 >> "+ str(self.getprobtype().value)+"\n"
         
         if mode.find('Difference between two means') > -1:
             self.gettestingtext().value += str(Samp_size)+"\n"
@@ -835,9 +834,9 @@ class VisualManager():
             self.gettestingtext().value += str(Samp_mean)+"\n"
       
         else:
-            self.gettestingtext().value +=" 3 >> "+ str(self.getprobtype().value)+"\n"
+          
             if mode.find('Paired sampled t-test') == -1:
-                self.gettestingtext().value +=" 4 >> "+ str(self.getprobtype().value)+"\n"
+            
                 Samp_size = int(Samp_size)+self.getsmapchange()
                 Samp_mean = float(Samp_mean)
 
@@ -847,8 +846,7 @@ class VisualManager():
                 Pop_mean = float(self.getPOPMEANtxt().value)
         Pop_stdev = None
 
-        self.gettestingtext().value +=" 5 >> "+ str(self.getprobtype().value)+"Sample size "+str(Samp_size)+"\n"
-     
+       
         if mode.find('One sample mean') > -1: 
             if self.getstdtype().value == "Population":
                 if is_float(self.getmytxt().value):
@@ -861,19 +859,15 @@ class VisualManager():
                     return
 
         if mode.find('Paired sampled t-test') > -1:
-            self.gettestingtext().value +=" 6 >> "+ str(self.getprobtype().value)+"\n"
-     
+           
             Samp_size = int(len(self.getprd_ttest_df()))
-            self.gettestingtext().value +=" 7  >> "+ str(self.getprobtype().value)+"\n"
-            self.gettestingtext().value += "Sample size: "+str(Samp_size)+"\n"
-
-            self.gettestingtext().value += "Before: "+str(self.getprtt_bef_feat())+", after: "+str(self.getprtt_aft_feat())+"\n"  
+          
             list1 = [x for x in self.getprd_ttest_df()[self.getprtt_aft_feat()]]
-            self.gettestingtext().value += "list1 : "+str(list1)+"\n"
+        
             list2 = [x for x in self.getprd_ttest_df()[self.getprtt_bef_feat()]]
             diff = [list1[i] - list2[i] for i in range(len(list1))]
  
-            self.gettestingtext().value += "Differences: "+str(diff)+"\n"
+           
             Samp_mean = sum(diff)/len(diff)
             stdev = 0
             for i in range(len(list1)):
@@ -895,8 +889,6 @@ class VisualManager():
             self.gettestingtext().value += str(Samp_stdev)+"\n"
        
             
-    
-        self.gettestingtext().value += str(self.getprobtype().value)+"\n"
           
         Conf_lvl = float(self.getconflvl().value)
         Two_sided = (self.gethyptype().value == "Two-tailed") 
@@ -908,11 +900,7 @@ class VisualManager():
             else:
                 Alt_side = "<"
     
-        self.gettestingtext().value += "Calling HT function...: "+"\n"
-        self.gettestingtext().value += "Samp_mean: "+str(Samp_mean)+"\n"
-        self.gettestingtext().value += "Samp_stdev: "+str(Samp_stdev)+"\n"
-        self.gettestingtext().value += "Pop_mean: "+str(Pop_mean)+"\n"
-        self.gettestingtext().value += "Samp_size: "+str(Samp_size)+"\n"
+      
         testreturn = TestHypothesis2(Samp_size,Samp_mean,Samp_stdev,Pop_mean,Pop_stdev,Two_sided,Alt_side,Conf_lvl,self.getInvFigPage(),mode) 
         self.getresultexp().value = "P-value: "+str(round(testreturn[0],3))+"\n"
         self.getresultexp().value += "Conclusion: "+str(testreturn[1])+"\n"
