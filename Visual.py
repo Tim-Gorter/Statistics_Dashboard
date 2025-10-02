@@ -729,6 +729,7 @@ class VisualManager():
             self.getSAMPSIZEtxt().description = 'S.Sizes'
             self.getSAMPMEANtxt().layout.visibility='visible'
             self.getSAMPMEANtxt().description = 'S.Means'
+            self.getmytxt().layout.visibility = 'visible'
             self.getmytxt().description = 'StDevs'
             self.getstdtype().layout.visibility = 'hidden'
             self.getfolderselect().layout.visibility= 'hidden'
@@ -816,8 +817,7 @@ class VisualManager():
 
       
         if mode.find('One sample mean') > -1: 
-            self.gettestingtext().value += "Checkinput: "+str(self.CheckInputComplete(mode))+"\n"
-    
+           
             if not self.CheckInputComplete(mode):
                 return
 
@@ -826,23 +826,15 @@ class VisualManager():
         Samp_mean = self.getSAMPMEANtxt().value
         
         if mode.find('Difference between two means') > -1:
-            self.gettestingtext().value += str(Samp_size)+"\n"
-            self.gettestingtext().value += str(Samp_mean)+"\n"
             Samp_size = [int(Samp_size[:Samp_size.find(",")]),int(Samp_size[Samp_size.find(",")+1:])]
-            Samp_mean = [float(Samp_mean[:Samp_mean.find(",")]),float(Samp_mean[Samp_mean.find(",")+1:])]
-            self.gettestingtext().value += str(Samp_size)+"\n"
-            self.gettestingtext().value += str(Samp_mean)+"\n"
-      
+            Samp_mean = [float(Samp_mean[:Samp_mean.find(",")]),float(Samp_mean[Samp_mean.find(",")+1:])]  
         else:
-          
             if mode.find('Paired sampled t-test') == -1:
-            
                 Samp_size = int(Samp_size)+self.getsmapchange()
                 Samp_mean = float(Samp_mean)
 
         Pop_mean = None
         if mode.find('Paired sampled t-test') == -1:
-            if mode.find('Difference between two means') == -1:
                 Pop_mean = float(self.getPOPMEANtxt().value)
         Pop_stdev = None
 
@@ -851,8 +843,7 @@ class VisualManager():
             if self.getstdtype().value == "Population":
                 if is_float(self.getmytxt().value):
                     Pop_stdev = float(self.getmytxt().value)
-           
-        
+         
         if mode.find('Difference between two means') == -1:
             if mode.find('Paired sampled t-test') == -1:
                 if Samp_size < 2:
@@ -874,8 +865,9 @@ class VisualManager():
                 stdev+=(diff[i]-Samp_mean)**2
             Samp_stdev= np.sqrt((stdev)/(len(diff)-1))
             Pop_mean = 0
-          
-         
+            
+
+        self.gettestingtext().value += "2>>> "+str(mode)+"\n"
         if mode.find('Paired sampled t-test') == -1:
             Samp_stdev = None 
     
@@ -886,10 +878,9 @@ class VisualManager():
         if mode.find('Difference between two means') > -1:
             Samp_stdev = self.getmytxt().value
             Samp_stdev = [float(Samp_stdev[:Samp_stdev.find(",")]),float(Samp_stdev[Samp_stdev.find(",")+1:])]
-            self.gettestingtext().value += str(Samp_stdev)+"\n"
+           
        
-            
-          
+         
         Conf_lvl = float(self.getconflvl().value)
         Two_sided = (self.gethyptype().value == "Two-tailed") 
         Alt_side = '' # only read in one-sided case: '>' or '<' -> H_1: \mu > x or \mu < x (x is claimed population parameter)
@@ -1009,7 +1000,7 @@ class VisualManager():
                     'heart_rate_data.csv',
                       'diet.csv',]
         
-        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],desription = 'Datasets: '))
+        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],description = 'Datasets: '))
         
         self.setlinelabel(widgets.Label(value='_______________________________'))
         self.getlinelabel().layout.display= 'none'
