@@ -1009,7 +1009,7 @@ class VisualManager():
                     'heart_rate_data.csv',
                       'diet.csv',]
         
-        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],description = 'Datasets: '))
+        self.setfolderselect(widgets.Dropdown(options=[x for x in pairedlinks],desription = 'Datasets: '))
         
         self.setlinelabel(widgets.Label(value='_______________________________'))
         self.getlinelabel().layout.display= 'none'
@@ -1385,7 +1385,7 @@ class VisualManager():
     def Openfile(self,event): 
     
       
-        url = self.getsource().value
+        url = datalinks[self.getsource().value]
     
         self.setanova_df(pd.read_csv(url,sep =',',quotechar="'"))
     
@@ -1409,7 +1409,7 @@ class VisualManager():
     def generateANTAB(self):
 
     
-        self.setsource(widgets.Dropdown(options = [x for x in datalinks],description = 'Source file'))
+        self.setsource(widgets.Dropdown(options = [x for x in datalinks.keys()],description = 'Source file'))
         
         self.setfeatures(widgets.Select(options=[],description = 'Features'))
         self.setanova_df(pd.DataFrame())

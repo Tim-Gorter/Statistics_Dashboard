@@ -22,13 +22,20 @@ def is_float(value):
 
 cases = dict()
 
+datalinks = { "Plant growth": 'https://vincentarelbundock.github.io/Rdatasets/csv/datasets/PlantGrowth.csv',
+             "Stress scores":'https://statsguru.bham.ac.uk/downloads/between-group-anova/between-group-anova-data.csv',
+             "Responses dataset 1": 'https://researchguides.library.vanderbilt.edu/ld.php?content_id=19195047',
+             "Responses dataset 2": 'https://researchguides.library.vanderbilt.edu/ld.php?content_id=19195103',
+             "Diet dataset": 'https://github.com/muratfirat78/CPP_Datasets/raw/main/diet.csv'
+             } 
+'''
 datalinks = ['https://vincentarelbundock.github.io/Rdatasets/csv/datasets/PlantGrowth.csv'
              ,'https://statsguru.bham.ac.uk/downloads/between-group-anova/between-group-anova-data.csv',
             'https://researchguides.library.vanderbilt.edu/ld.php?content_id=19195047',
              'https://researchguides.library.vanderbilt.edu/ld.php?content_id=19195103',
             'https://researchguides.library.vanderbilt.edu/content/enforced/474750-2024S.1.BSCI.1511L.01/p-qrs-anova-example%202.0.csv',
              'https://github.com/muratfirat78/CPP_Datasets/raw/main/diet.csv']
-
+'''
 
 def ReadCases():    
     try:
