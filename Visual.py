@@ -921,7 +921,7 @@ class VisualManager():
     
         with self.getDFPage():
             clear_output()
-            display.display(self.getprd_ttest_df().head(3)) 
+            display(self.getprd_ttest_df().head(3)) 
      
         return
 
