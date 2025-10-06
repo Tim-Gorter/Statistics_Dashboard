@@ -14,7 +14,7 @@ from IPython.display import clear_output
 
 def is_float(value):
     try:
-        float(value)
+        float(value) 
         return True
     except ValueError:
         return False
