@@ -912,7 +912,7 @@ class VisualManager():
             'mode': mode
             }
         }
-        self.drive.write_answer_to_file(answer_obj,self.setexmplst + '.json')
+        self.drive.write_answer_to_file(answer_obj,self.setexmplst.value + '.json')
         self.drive.upload_log('Hypothesis testing.json')
         
         return
