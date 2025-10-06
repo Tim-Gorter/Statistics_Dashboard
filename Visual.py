@@ -34,9 +34,9 @@ display(HTML("<style>.blue_label { color:blue }</style>"))
 
 class VisualManager():
 
-    def __init__(self):  
+    def __init__(self, drive):  
 
-
+        self.drive = drive
         self.DFPage = None
         self.caseexp = None
         self.POPMEANtxt = None
@@ -895,6 +895,26 @@ class VisualManager():
         testreturn = TestHypothesis2(Samp_size,Samp_mean,Samp_stdev,Pop_mean,Pop_stdev,Two_sided,Alt_side,Conf_lvl,self.getInvFigPage(),mode) 
         self.getresultexp().value = "P-value: "+str(round(testreturn[0],3))+"\n"
         self.getresultexp().value += "Conclusion: "+str(testreturn[1])+"\n"
+        answer_obj = {
+        "type": "multiple_choice",
+        "result": "correct",
+        "answer":
+            {
+            'P-value': round(testreturn[0], 3),
+            'Conclusion': str(testreturn[1]),
+            'Samp_size': Samp_size,
+            'Samp_mean': Samp_mean,
+            'Samp_stdev': Samp_stdev,
+            'Pop_mean': Pop_mean,
+            'Pop_stdev': Pop_stdev,
+            'Two_sided': Two_sided,
+            'Alt_side': Alt_side,
+            'Conf_lvl': Conf_lvl,
+            'mode': mode
+            }
+        }
+        self.drive.write_answer_to_file(answer_obj,'Hypothesis testing.json')
+        self.drive.upload_log('Hypothesis testing.json')
         
         return
 
