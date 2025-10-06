@@ -913,6 +913,7 @@ class VisualManager():
             'mode': mode
             }
         }
+        print("HJoi?")
         self.drive.write_answer_to_file(answer_obj,'Hypothesis testing.json')
         self.drive.upload_log('Hypothesis testing.json')
         
