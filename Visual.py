@@ -899,7 +899,7 @@ class VisualManager():
         "type": "custom",
         "answer":
             {
-            'P-value': round(testreturn[0], 3),
+            'P-value': testreturn[0],
             'Conclusion': str(testreturn[1]),
             'Samp_size': Samp_size,
             'Samp_mean': Samp_mean,
