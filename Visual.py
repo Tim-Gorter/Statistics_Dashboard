@@ -896,8 +896,7 @@ class VisualManager():
         self.getresultexp().value = "P-value: "+str(round(testreturn[0],3))+"\n"
         self.getresultexp().value += "Conclusion: "+str(testreturn[1])+"\n"
         answer_obj = {
-        "type": "multiple_choice",
-        "result": "correct",
+        "type": "custom",
         "answer":
             {
             'P-value': round(testreturn[0], 3),
